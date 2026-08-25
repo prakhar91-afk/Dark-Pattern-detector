@@ -1,0 +1,64 @@
+{
+  "manifest_version": 3,
+  "name": "Dark Pattern Detector",
+  "short_name": "DarkScan",
+  "version": "1.0.0",
+  "description": "Real-time detection of manipulative UI/UX dark patterns. Scan any webpage and get a live trust score with highlighted deceptive elements.",
+  "author": "Dark Pattern Detector Team",
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "48":  "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Dark Pattern Detector"
+  },
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs",
+    "storage",
+    "alarms",
+    "contextMenus"
+  ],
+
+  "host_permissions": [
+    "<all_urls>",
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*"
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "popup/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dpd-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist model checkpoints and training data across container restarts
+      - ./checkpoints:/app/checkpoints
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s   # allow time for model loading
+
+networks:
+  default:
+    name: dpd-network
